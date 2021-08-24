@@ -70,20 +70,48 @@ class VHA(object):
         else:
             self.schema.remove(line)
 
+    def prove_examples(self,patient_objects):
+        '''proves all consequents in a loop
+           from patient facts using guidelines
+        '''
+        examples = []
+        true_examples = []
+        symptoms = [x.split(',')[1][:-1] for x in Patient.possible_facts]
+        patients = ['p'+str(i) for i in range(Patient.count)]
+        for patient in patients:
+            examples.append("depression("+patient+')')
+            for symptom in symptoms:
+                examples.append("significant("+patient+','+symptom+')')
 
+
+        for example in examples:
+            before_count = 0
+            while True:
+                after_count = before_count
+                for guideline in self.guidelines:
+                    if example.split('(')[0] in guideline.split(":-")[0]:
+                        Prover.rule = guideline
+                        Patient_id = example.split('(')[1][1:-1]
+                        for patient in patient_objects:
+                            if patient.id == Patient_id:
+                                Prover.facts = patient.facts
+                                break
+                        print (example)
+                        print (Prover.rule)
+                        print (Prover.facts)
+                        input()
+                        if Prover.prove_rule(example):
+                            true_examples.append(example)
+                            after_count += 1
+                            break
+                if after_count == before_count:
+                    break
+                before_count = after_count
+                print (true_examples)
+                input()
+        return true_examples
+                           
 #============TESTER FUNCTIONS===============
-
-def create_examples():
-
-    symptoms = [x.split(',')[1][:-1] for x in Patient.possible_facts]
-    patients = ['p'+str(i) for i in range(Patient.count)]
-    examples = []
-    for patient in patients:
-        examples.append("depression("+patient+')')
-        for symptom in symptoms:
-            examples.append("significant("+patient+','+symptom+')')
-
-    return examples
 
 def main():
 
@@ -91,7 +119,11 @@ def main():
     my_vha.set_guidelines(["depression(X):-significant(X,S)",
                            "significant(X,S):-depsymptom(X,S);freq(X,S,high)"])
     
+    patients = []
     patient = Patient()
+    patients.append(patient)
+    facts = my_vha.prove_examples(patients)
+    '''
     Prover.rule = my_vha.guidelines[1]
     Prover.facts = patient.facts
     examples = create_examples()
@@ -99,6 +131,7 @@ def main():
     print (Prover.rule)
     print (examples[1])
     print (Prover.prove_rule(examples[1]))
+    '''
 
 main()
     
