@@ -71,15 +71,34 @@ class VHA(object):
             self.schema.remove(line)
 
 
-#============TESTER FUNCTION===============
+#============TESTER FUNCTIONS===============
+
+def create_examples():
+
+    symptoms = [x.split(',')[1][:-1] for x in Patient.possible_facts]
+    patients = ['p'+str(i) for i in range(Patient.count)]
+    examples = []
+    for patient in patients:
+        examples.append("depression("+patient+')')
+        for symptom in symptoms:
+            examples.append("significant("+patient+','+symptom+')')
+
+    return examples
+
 def main():
 
     my_vha = VHA()
     my_vha.set_guidelines(["depression(X):-significant(X,S)",
-                           "significant(X,S):-depSymptom(X,S);freq(S,high)"])
-
+                           "significant(X,S):-depsymptom(X,S);freq(X,S,high)"])
+    
     patient = Patient()
-    print (patient.facts)
+    Prover.rule = my_vha.guidelines[1]
+    Prover.facts = patient.facts
+    examples = create_examples()
+    print (Prover.facts)
+    print (Prover.rule)
+    print (examples[1])
+    print (Prover.prove_rule(examples[1]))
 
 main()
     
