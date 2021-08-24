@@ -55,6 +55,6 @@ class Patient(object):
             if random() < 0.5:
                 self.facts.append(fact.replace('X','p'+str(Patient.get_id())))
                 if random() < 0.5:
-                    self.facts.append('freq('+fact.split(',')[1][:-1]+',high'+')')
+                    self.facts.append('freq('+'p'+str(Patient.get_id())+','+fact.split(',')[1][:-1]+',high'+')')
 
         Patient.count += 1           
