@@ -79,6 +79,7 @@ def main():
                            "significant(X,S):-depSymptom(X,S);freq(S,high)"])
 
     patient = Patient()
+    print (patient.facts)
 
 main()
     

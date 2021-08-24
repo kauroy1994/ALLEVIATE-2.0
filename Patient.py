@@ -57,5 +57,4 @@ class Patient(object):
                 if random() < 0.5:
                     self.facts.append('freq('+fact.split(',')[1][:-1]+',high'+')')
 
-        Patient.count += 1
-            
+        Patient.count += 1           
