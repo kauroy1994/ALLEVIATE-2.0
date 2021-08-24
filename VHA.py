@@ -25,6 +25,43 @@ class VHA(object):
         self.nlg_module = nlg_module
 
 
+    def add_guideline(self,
+                      guideline):
+        '''adds a guideline to the list of guidelines
+           as a horn clause
+        '''
+
+        self.guidelines.append(guideline)
+
+    def add_facts(self,
+                  fact):
+        '''adds a fact to the list of facts
+           as a predicate - KG update/init
+        '''
+
+        self.facts.append(fact)
+
+    def set_schema(self,
+                   schema):
+        '''sets schema for the predicates
+           in the fact file - KG init
+        '''
+
+        self.schema = schema
+
+    def update_schema(self,
+                      line,
+                      add = True):
+        '''updates the schema - KG update
+           line can be added/deleted
+        '''
+
+        if add:
+            self.schema.append(line)
+        else:
+            self.schema.remove(line)
+
+
 #============TESTER FUNCTION===============
 def main():
 
